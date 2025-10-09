@@ -168,6 +168,40 @@ export async function criarSala(nova: Room): Promise<Room> {
   return nova
 }
 
+// Buscar sala por ID
+export async function buscarSalaPorId(id: string): Promise<Room | undefined> {
+  const salas = await buscarTodasSalas()
+  return salas.find((s) => s.id === id)
+}
+
+// Atualizar sala
+export async function atualizarSala(id: string, dadosAtualizados: Partial<Room>): Promise<Room | undefined> {
+  const salas = await buscarTodasSalas()
+  const indice = salas.findIndex((s) => s.id === id)
+  if (indice === -1) return undefined
+
+  // Atualiza apenas os campos fornecidos
+  salas[indice] = {
+    ...salas[indice],
+    ...dadosAtualizados,
+
+  }
+
+  await salvarDados<Room>(ARQUIVO_ROOMS, salas)
+  return salas[indice]
+}
+
+// Deletar sala
+export async function deletarSala(id: string): Promise<boolean> {
+  const salas = await buscarTodasSalas()
+  const novasSalas = salas.filter((s) => s.id !== id)
+  
+  if (novasSalas.length === salas.length) return false // não encontrou sala
+  
+  await salvarDados<Room>(ARQUIVO_ROOMS, novasSalas)
+  return true
+}
+
 // ========================================
 // FUNÇÕES ESPECÍFICAS - BOOKINGS (Reservas)
 // ========================================

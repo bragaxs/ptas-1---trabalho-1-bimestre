@@ -26,7 +26,7 @@ import * as persistenceService from './persistenceService'
  * @returns Promise com o estudante criado
  * @throws Error se validação falhar
  */
-export async function criarEstudante(dados: createdAt): Promise<User> {
+export async function criarUsuario(dados: createdAt): Promise<User> {
   // ========================================
   // 1. VALIDAR UNICIDADE DE EMAIL
   // ========================================
@@ -113,7 +113,7 @@ export async function buscarPorId(id: string): Promise<User | undefined> {
  * @param dados - Dados a atualizar
  * @returns Promise com estudante atualizado ou undefined
  */
-export async function atualizarEstudante(
+export async function atualizarUsuario(
   id: string,
   dados: updatedAt,
 ): Promise<User | undefined> {

@@ -10,10 +10,8 @@
 // Request = dados que vêm do cliente
 // Response = resposta que enviamos ao cliente
 import { Request, Response } from 'express'
-
 // Importa os tipos necessários
-import { createdAt, updatedAt, User } from '../models/userModel'
-
+import { User, createdAt, updatedAt } from '../models/userModel'
 // Importa o serviço de usuários
 import { userService } from '../services'
 
@@ -47,7 +45,7 @@ export async function criarUsuario(req: Request, res: Response): Promise<Respons
 
     // 3. CHAMAR O SERVICE PARA CRIAR
     // userService.criarUsuario() faz as validações e salva
-    const novoUsuario = await userService.criarUsuario(dados)
+    const novoUsuario = await userService.criarUsuario(dados) //await serve para esperar a Promise 
 
     // 4. RETORNAR RESPOSTA DE SUCESSO
     // Status 201 = Created (recurso criado com sucesso)
@@ -235,7 +233,7 @@ export async function atualizarUsuario(req: Request, res: Response): Promise<Res
     }
 
     // 3. CHAMAR SERVICE PARA ATUALIZAR
-    const usuarioAtualizado = await userService.atualizarEstudante(id, dados)
+    const usuarioAtualizado = await userService.atualizarUsuario(id, dados)
 
     // 4. VERIFICAR SE ENCONTROU
     if (!usuarioAtualizado) {
@@ -270,7 +268,7 @@ export async function atualizarUsuario(req: Request, res: Response): Promise<Res
  * @param res - Resposta HTTP
  * @returns Promise com a resposta
  */
-export async function deletarEstudante(req: Request, res: Response): Promise<Response> {
+export async function deletarUsuario(req: Request, res: Response): Promise<Response> {
   try {
     // 1. EXTRAIR ID
     const { id } = req.params
@@ -320,3 +318,4 @@ export async function obterEstatisticas(req: Request, res: Response): Promise<Re
     })
   }
 }
+

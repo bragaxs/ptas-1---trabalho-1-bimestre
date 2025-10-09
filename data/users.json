@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Vitorio Braga",
+    "email": "vitorio@example.com",
+    "registration": "123456",
+    "isActive": true
+  },
+  {
+    "name": "Vitorio Braga",
+    "email": "vitorio@example.com",
+    "createdAt": "2025-10-09T03:49:09.015Z",
+    "updatedAt": "2025-10-09T03:49:09.023Z",
+    "role": "Standard",
+    "registration": "123456",
+    "isActive": true
+  },
+  {
+    "name": "Vitorio Marques",
+    "email": "marques@example.com",
+    "registration": "12345655",
+    "isActive": true
+  },
+  {
+    "name": "Vitorio Marques",
+    "email": "marques@example.com",
+    "createdAt": "2025-10-09T03:49:48.549Z",
+    "updatedAt": "2025-10-09T03:49:48.549Z",
+    "role": "Standard",
+    "registration": "12345655",
+    "isActive": true
+  }
+]
