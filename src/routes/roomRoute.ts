@@ -9,7 +9,7 @@ import * as roomController from '../controllers/roomController'
 const router = Router()
 
 //cria nova sala
-router.post('/', roomController.criarSalaController)
+router.post('/criar', roomController.criarSalaController)
 
 //busca todas as salas
 router.get('/search', roomController.buscarTodasSalasController)

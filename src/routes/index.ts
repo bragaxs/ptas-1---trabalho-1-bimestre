@@ -15,8 +15,8 @@ const router = Router()
 
 // DEFINIR ROTAS
 router.use('/user', userRoutes)
-router.use('/rooms', roomRoutes)
-router.use('/bookings', bookingRoutes)
+router.use('/room', roomRoutes)
+router.use('/booking', bookingRoutes)
 
 
 
