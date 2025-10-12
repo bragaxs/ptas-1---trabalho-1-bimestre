@@ -8,8 +8,7 @@ export interface Booking {
   title: string;
   description?: string;
   status: 'Confirmed' | 'Cancelled' | 'Pending';
-  createdAt: string;        
-  updatedAt: string;       
+       
 }
 
 export interface createdAt {

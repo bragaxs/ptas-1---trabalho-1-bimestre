@@ -28,5 +28,21 @@
     "role": "Standard",
     "registration": "12345655",
     "isActive": true
+  },
+  {
+    "name": "Marcos Braga",
+    "email": "marcos@example.com",
+    "role": "Standard",
+    "registration": "1234",
+    "isActive": true
+  },
+  {
+    "name": "Marcos Braga",
+    "email": "marcos@example.com",
+    "createdAt": "2025-10-09T13:25:35.229Z",
+    "updatedAt": "2025-10-09T13:25:35.229Z",
+    "role": "Standard",
+    "registration": "1234",
+    "isActive": true
   }
 ]

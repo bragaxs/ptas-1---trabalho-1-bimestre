@@ -41,8 +41,7 @@ export async function criarReserva(dados: Omit<Booking, 'id' | 'createdAt' | 'up
     title: dados.title,
     description: dados.description || '',
     status: dados.status || 'Pending',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+
   }
 
   // 5️⃣ Salvar no arquivo JSON via camada de persistência
@@ -80,7 +79,7 @@ export async function atualizarReserva(
   const reservaAtualizada: Booking = {
     ...reservaExistente,
     ...dados,
-    updatedAt: new Date().toISOString(),
+
   }
 
   // Salva no persistenceService

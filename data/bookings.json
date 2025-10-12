@@ -1,0 +1,15 @@
+[
+  {
+    "id": "1",
+    "roomId": "1",
+    "userId": "42",
+    "date": "2025-10-09",
+    "startTime": "09:00",
+    "endTime": "11:00",
+    "title": "Reunião de Planejamento",
+    "description": "Reunião para definir metas do próximo trimestre.",
+    "status": "Confirmed",
+    "createdAt": "2025-10-09T13:39:10.221Z",
+    "updatedAt": "2025-10-09T13:39:10.221Z"
+  }
+]

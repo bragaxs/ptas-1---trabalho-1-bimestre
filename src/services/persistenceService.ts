@@ -244,7 +244,7 @@ export async function atualizarReserva(
   reservas[indice] = {
     ...reservas[indice],
     ...dadosAtualizados,
-    updatedAt: new Date().toISOString(), // Atualiza o timestamp de modificação
+
   }
 
   // Salva o array de reservas atualizado no arquivo
