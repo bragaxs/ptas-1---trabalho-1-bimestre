@@ -1,18 +1,14 @@
-// ========================================
-// ROOM.CONTROLLER.TS - Controlador de Salas
-// ========================================
-
 import { Request, Response } from 'express'
 import { Room, createdAt, updatedAt } from '../models/roomModel'
 import { roomService } from '../services'
 
 
-// ➕ criarSala - POST /api/rooms
+
 export async function criarSalaController(req: Request, res: Response): Promise<Response> {
   try {
     const dados: createdAt = req.body
 
-    // Validação de campos obrigatórios
+   
     if (!dados.name || !dados.capacity) {
       return res.status(400).json({
         erro: 'Campos obrigatórios faltando',
@@ -33,7 +29,7 @@ export async function criarSalaController(req: Request, res: Response): Promise<
   }
 }
 
-// 👥 buscarTodasSalas - GET /api/rooms
+
 export async function buscarTodasSalasController(req: Request, res: Response): Promise<Response> {
   try {
     const salas = await roomService.buscarTodas()
@@ -46,7 +42,7 @@ export async function buscarTodasSalasController(req: Request, res: Response): P
   }
 }
 
-// 🔍 buscarSalaPorId - GET /api/rooms/:id
+
 export async function buscarSalaPorIdController(req: Request, res: Response): Promise<Response> {
   try {
     const { id } = req.params
@@ -65,7 +61,7 @@ export async function buscarSalaPorIdController(req: Request, res: Response): Pr
   }
 }
 
-// ✏️ atualizarSala - PUT /api/rooms/:id
+
 export async function atualizarSalaController(req: Request, res: Response): Promise<Response> {
   try {
     const { id } = req.params
@@ -93,7 +89,7 @@ export async function atualizarSalaController(req: Request, res: Response): Prom
   }
 }
 
-// 🗑️ deletarSala - DELETE /api/rooms/:id
+
 export async function deletarSalaController(req: Request, res: Response): Promise<Response> {
   try {
     const { id } = req.params

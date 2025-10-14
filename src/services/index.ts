@@ -1,6 +1,3 @@
-/**
- * 🗂️ INDEX.TS - Exportações centralizadas dos Services
- */
 
 // Exporta todas as funções do user.service como um namespace
 export * as userService from '../services/userService'

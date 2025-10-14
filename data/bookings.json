@@ -1,15 +1,35 @@
 [
   {
-    "id": "1",
+    "id": "2",
     "roomId": "1",
-    "userId": "42",
-    "date": "2025-10-09",
+    "userId": "1",
+    "date": "2025-10-15",
     "startTime": "09:00",
+    "endTime": "10:00",
+    "title": "Reunião de planejamento",
+    "description": "Discutir metas do próximo mês",
+    "status": "Pending"
+  },
+  {
+    "id": "3",
+    "roomId": "1",
+    "userId": "1",
+    "date": "2025-10-15",
+    "startTime": "09:00",
+    "endTime": "10:00",
+    "title": "Reuniao de planejamento",
+    "description": "Discutir metas do proximo mes",
+    "status": "Pending"
+  },
+  {
+    "id": "4",
+    "roomId": "1",
+    "userId": "1",
+    "date": "2025-10-14",
+    "startTime": "10:00",
     "endTime": "11:00",
     "title": "Reunião de Planejamento",
-    "description": "Reunião para definir metas do próximo trimestre.",
-    "status": "Confirmed",
-    "createdAt": "2025-10-09T13:39:10.221Z",
-    "updatedAt": "2025-10-09T13:39:10.221Z"
+    "description": "Planejamento semanal",
+    "status": "Pending"
   }
 ]

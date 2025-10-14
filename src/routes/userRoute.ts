@@ -15,11 +15,8 @@ router.post('/', userController.criarUsuario)
 //rota para estatisticas
 router.get('/stats', userController.obterEstatisticas)
 
-//rota para busca por texto
-router.get('/search', userController.buscarPorTexto)
 
-//rota para busca com filtros
-router.get('/', userController.buscarComFiltros)
+
 
 //rota para busca por id
 router.get('/:id', userController.buscarPorId)

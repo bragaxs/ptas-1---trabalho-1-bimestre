@@ -1,14 +1,1 @@
-[
-  {
-    "id": "1",
-    "name": "Sala de Reunião 1",
-    "capacity": 12,
-    "location": "Bloco A - 2º andar",
-    "features": [
-      "Projetor",
-      "Wi-Fi",
-      "Ar-condicionado"
-    ],
-    "isActive": true
-  }
-]
+[]

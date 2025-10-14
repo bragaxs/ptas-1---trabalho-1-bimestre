@@ -44,5 +44,46 @@
     "role": "Standard",
     "registration": "1234",
     "isActive": true
+  },
+  {
+    "name": "Vilso Braga",
+    "email": "vilso@example.com",
+    "registration": "20251013-001",
+    "isActive": true
+  },
+  {
+    "name": "Vilso Braga",
+    "email": "vilso@example.com",
+    "createdAt": "2025-10-14T02:10:38.466Z",
+    "updatedAt": "2025-10-14T02:10:38.466Z",
+    "role": "Standard",
+    "registration": "20251013-001",
+    "isActive": true
+  },
+  {
+    "name": "Vilso Braga Junior",
+    "email": "vilsojr@example.com",
+    "registration": "20251013-0015555",
+    "isActive": true,
+    "role": "Coordenador"
+  },
+  {
+    "name": "Vilso Braga Junior",
+    "email": "vilsojr@example.com",
+    "createdAt": "2025-10-14T02:13:56.055Z",
+    "updatedAt": "2025-10-14T02:13:56.055Z",
+    "role": "Standard",
+    "registration": "20251013-0015555",
+    "isActive": true
+  },
+  {
+    "id": "1",
+    "name": "Vitorio Braga",
+    "email": "vitorio5@example.com",
+    "createdAt": "2025-10-14T03:26:25.478Z",
+    "updatedAt": "2025-10-14T03:26:25.478Z",
+    "role": "Standard",
+    "registration": "20250001",
+    "isActive": true
   }
 ]

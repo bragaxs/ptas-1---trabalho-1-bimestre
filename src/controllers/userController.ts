@@ -1,59 +1,31 @@
-/**
- * 🎮 STUDENT.CONTROLLER.TS - Controlador de Estudantes
- *
- * Este arquivo contém as funções que respondem às requisições HTTP.
- * Cada função é responsável por um endpoint da API.
- */
-
-// IMPORTAÇÕES
-// Request e Response são tipos do Express
-// Request = dados que vêm do cliente
-// Response = resposta que enviamos ao cliente
 import { Request, Response } from 'express'
-// Importa os tipos necessários
+
 import { User, createdAt, updatedAt } from '../models/userModel'
-// Importa o serviço de usuários
+
 import { userService } from '../services'
 
-// FUNÇÕES CONTROLADORAS
-/**
- * ➕ criarUsuario - POST /api/users
- *
- * Cria um novo usuário
- *
- * @param req - Requisição HTTP (contém dados no body)
- * @param res - Resposta HTTP
- * @returns Promise com a resposta
- */
 export async function criarUsuario(req: Request, res: Response): Promise<Response> {
   try {
     
-    // 1. EXTRAIR DADOS DO BODY DA REQUISIÇÃO
 
-    // req.body = dados enviados pelo cliente em JSON
     const dados: createdAt = req.body
 
-    // 2. VALIDAR CAMPOS OBRIGATÓRIOS
-    // Verifica se todos os campos necessários foram enviados
+
     if (!dados.name || !dados.email || !dados.registration || !dados.isActive) {
-      // Status 400 = Bad Request (requisição malformada)
+      
       return res.status(400).json({
         erro: 'Campos obrigatórios faltando',
         camposNecessarios: ['name', 'email', 'registration', 'isActive'],
       })
     }
 
-    // 3. CHAMAR O SERVICE PARA CRIAR
-    // userService.criarUsuario() faz as validações e salva
+   
     const novoUsuario = await userService.criarUsuario(dados) //await serve para esperar a Promise 
 
-    // 4. RETORNAR RESPOSTA DE SUCESSO
-    // Status 201 = Created (recurso criado com sucesso)
-    // .json() = envia resposta em formato JSON
+
     return res.status(201).json(novoUsuario)
   } catch (erro: any) {
-    // 5. TRATAR ERROS
-    // Se erro é de validação (email/matrícula duplicados)
+   
     if (erro.message.includes('já está cadastrad')) {
       // Status 409 = Conflict (conflito, recurso já existe)
       return res.status(409).json({
@@ -70,16 +42,10 @@ export async function criarUsuario(req: Request, res: Response): Promise<Respons
   }
 }
 
-/**
- * 👥 buscarTodos - GET /api/students
- * Busca todos os estudantes
- * @param req - Requisição HTTP
- * @param res - Resposta HTTP
- * @returns Promise com a resposta
- */
+
 export async function buscarTodos(req: Request, res: Response): Promise<Response> {
   try {
-    // Chama o service para buscar todos
+    
     const usuarios = await userService.buscarTodos()
 
     // Status 200 = OK (sucesso)
@@ -92,24 +58,16 @@ export async function buscarTodos(req: Request, res: Response): Promise<Response
   }
 }
 
-/**
- * 🔍 buscarPorId - GET /api/students/:id
- * Busca um estudante específico pelo ID
- * @param req - Requisição HTTP (ID vem em req.params)
- * @param res - Resposta HTTP
- * @returns Promise com a resposta
- */
+
 export async function buscarPorId(req: Request, res: Response): Promise<Response> {
   try {
-    // 1. EXTRAIR ID DA URL
-    // req.params = parâmetros da URL
-    // Exemplo: /api/students/123 → req.params.id = "123"
+
     const { id } = req.params
 
-    // 2. BUSCAR USUÁRIO
+  
     const usuario = await userService.buscarPorId(id)
 
-    // 3. VERIFICAR SE ENCONTROU
+   
     if (!usuario) {
       // Status 404 = Not Found (não encontrado)
       return res.status(404).json({
@@ -127,20 +85,10 @@ export async function buscarPorId(req: Request, res: Response): Promise<Response
   }
 }
 
-/**
- * 🔎 buscarComFiltros - GET /api/students?course=X&isActive=true
- * Busca estudantes com filtros opcionais
- * @param req - Requisição HTTP (filtros vêm em req.query)
- * @param res - Resposta HTTP
- * @returns Promise com a resposta
- */
+
 export async function buscarComFiltros(req: Request, res: Response): Promise<Response> {
   try {
-    // 1. EXTRAIR PARÂMETROS DE QUERY
-    // req.query = parâmetros após ? na URL
-    // Exemplo: /api/students?course=ADS&isActive=true
-    // → req.query.course = "ADS"
-    // → req.query.isActive = "true"
+    // 1. EXTRAIR PARÂMETROS DE FILTRO
     const { course, isActive } = req.query
 
     // 2. BUSCAR TODOS OS USUÁRIOS
@@ -166,13 +114,7 @@ export async function buscarComFiltros(req: Request, res: Response): Promise<Res
   }
 }
 
-/**
- * 🔎 buscarPorTexto - GET /api/students/search?q=texto
- * Busca estudantes por texto (nome, email ou matrícula)
- * @param req - Requisição HTTP
- * @param res - Resposta HTTP
- * @returns Promise com a resposta
- */
+
 export async function buscarPorTexto(req: Request, res: Response): Promise<Response> {
   try {
     // 1. EXTRAIR TEXTO DE BUSCA
@@ -211,13 +153,7 @@ export async function buscarPorTexto(req: Request, res: Response): Promise<Respo
   }
 }
 
-/**
- * ✏️ atualizarEstudante - PUT /api/students/:id
- * Atualiza dados de um estudante
- * @param req - Requisição HTTP (ID em params, dados em body)
- * @param res - Resposta HTTP
- * @returns Promise com a resposta
- */
+
 export async function atualizarUsuario(req: Request, res: Response): Promise<Response> {
   try {
     // 1. EXTRAIR ID E DADOS
@@ -259,15 +195,7 @@ export async function atualizarUsuario(req: Request, res: Response): Promise<Res
   }
 }
 
-/**
- * 🗑️ deletarEstudante - DELETE /api/students/:id
- *
- * Remove um estudante
- *
- * @param req - Requisição HTTP
- * @param res - Resposta HTTP
- * @returns Promise com a resposta
- */
+
 export async function deletarUsuario(req: Request, res: Response): Promise<Response> {
   try {
     // 1. EXTRAIR ID
@@ -295,15 +223,7 @@ export async function deletarUsuario(req: Request, res: Response): Promise<Respo
   }
 }
 
-/**
- * 📊 obterEstatisticas 
- *
- * Obtém estatísticas dos usuarios, se esta ativo, inativo
- *
- * @param req - Requisição HTTP
- * @param res - Resposta HTTP
- * @returns Promise com a resposta
- */
+
 export async function obterEstatisticas(req: Request, res: Response): Promise<Response> {
   try {
     // Chama service para calcular estatísticas
