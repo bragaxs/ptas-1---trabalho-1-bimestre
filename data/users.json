@@ -75,15 +75,5 @@
     "role": "Standard",
     "registration": "20251013-0015555",
     "isActive": true
-  },
-  {
-    "id": "1",
-    "name": "Vitorio Braga",
-    "email": "vitorio5@example.com",
-    "createdAt": "2025-10-14T03:26:25.478Z",
-    "updatedAt": "2025-10-14T03:26:25.478Z",
-    "role": "Standard",
-    "registration": "20250001",
-    "isActive": true
   }
 ]
