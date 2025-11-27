@@ -8,6 +8,13 @@
 // ========================================
 // IMPORTAÇÕES
 // ========================================
+import mongoose from 'mongoose'
+
+import { connectMongo } from "./database/mongo";
+
+connectMongo();
+
+
 
 // Express: framework web
 import express, { Application } from 'express'
