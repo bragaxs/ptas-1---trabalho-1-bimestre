@@ -1,56 +1,79 @@
-datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL")
-}
 
 generator client {
   provider = "prisma-client-js"
 }
 
-enum BookingStatus {
-  Confirmed
-  Cancelled
-  Pending
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
 }
 
-enum UserRole {
-  Admin
-  Standard
-}
-
-model Room {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  capacity  Int
-  location  String?
-  features  String[]
-  isActive  Boolean
-  bookings  Booking[] @relation("RoomBookings")
-}
 
 model User {
   id           String    @id @default(auto()) @map("_id") @db.ObjectId
   name         String
-  email        String    @unique
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  role         UserRole
-  registration String    @unique
-  isActive     Boolean
-  bookings     Booking[] @relation("UserBookings")
+  email        String     @unique
+  role         Role       @default(Standard)
+  registration String     @unique
+  isActive     Boolean    @default(true)
+
+  bookings     Booking[]
+
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@map("users")
 }
 
+enum Role {
+  Admin
+  Standard
+}
+
+
+model Room {
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  capacity  Int
+  location  String?
+  features  String[]
+  isActive  Boolean    @default(true)
+
+  // Relacionamentos
+  bookings  Booking[]
+
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  @@map("rooms")
+}
+
+
 model Booking {
-  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+
   date        String
-  roomId      String        @db.ObjectId
-  userId      String        @db.ObjectId
   startTime   String
   endTime     String
   title       String
   description String?
-  status      BookingStatus
+  status      Status
 
-  room        Room          @relation("RoomBookings", fields: [roomId], references: [id])
-  user        User          @relation("UserBookings", fields: [userId], references: [id])
+  // Relacionamentos
+  roomId      String    @db.ObjectId
+  room        Room      @relation(fields: [roomId], references: [id])
+
+  userId      String    @db.ObjectId
+  user        User      @relation(fields: [userId], references: [id])
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("bookings")
+}
+
+enum Status {
+  Confirmed
+  Cancelled
+  Pending
 }

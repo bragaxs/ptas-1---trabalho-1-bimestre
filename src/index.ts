@@ -8,10 +8,10 @@
 // ========================================
 // IMPORTAÇÕES
 // ========================================
-import mongoose from 'mongoose'
+
 
 import { connectMongo } from "./database/mongo";
-
+import { prisma, connect, disconnect } from './database'
 connectMongo();
 
 
@@ -122,3 +122,51 @@ function iniciarServidor(): void {
 
 // Chama a função para iniciar o servidor
 iniciarServidor()
+
+
+
+async function main() {
+  // Conectar ao banco
+  await connect()
+
+
+ const newUser = await prisma.user.create({
+  data: {
+    name: 'João Silva',
+    email: 'joao@email.com',
+
+
+    registration: 'REG-001',   
+
+
+  },
+})
+
+console.log('Usuário criado:', newUser)
+
+// BUSCAR todos os registros
+const users = await prisma.user.findMany()
+console.log('Todos os usuários:', users)
+
+// BUSCAR por ID
+const user = await prisma.user.findUnique({
+  where: { id: newUser.id },
+})
+console.log('Usuário encontrado:', user)
+
+// ATUALIZAR registro
+const updated = await prisma.user.update({
+  where: { id: newUser.id },
+  data: { name: 'João Pedro Silva' },
+})
+console.log('Usuário atualizado:', updated)
+
+// DELETAR registro
+await prisma.user.delete({
+  where: { id: newUser.id },
+})
+console.log('Usuário deletado!')
+
+// Desconectar
+await disconnect()
+}

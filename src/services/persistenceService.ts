@@ -8,158 +8,170 @@ interface EntidadeComId {
   id: string
 }
 
-const ARQUIVO_USERS = path.join(__dirname, '../../data/users.json')
-const ARQUIVO_ROOMS = path.join(__dirname, '../../data/rooms.json')
-const ARQUIVO_BOOKINGS = path.join(__dirname, '../../data/bookings.json')
+export class PersistenceService {
+  private USERS_FILE = path.join(__dirname, '../../data/users.json')
+  private ROOMS_FILE = path.join(__dirname, '../../data/rooms.json')
+  private BOOKINGS_FILE = path.join(__dirname, '../../data/bookings.json')
 
-
-async function lerDados<T>(caminhoArquivo: string): Promise<T[]> {
-  try {
-    const conteudo = await fs.readFile(caminhoArquivo, 'utf-8')
-    return JSON.parse(conteudo)
-  } catch {
-    return []
+  // -------------------- MÉTODOS GERAIS --------------------
+  private async lerDados<T>(caminhoArquivo: string): Promise<T[]> {
+    try {
+      const conteudo = await fs.readFile(caminhoArquivo, 'utf-8')
+      return JSON.parse(conteudo)
+    } catch {
+      return []
+    }
   }
-}
 
-async function salvarDados<T>(caminhoArquivo: string, entidades: T[]): Promise<void> {
-  const pasta = path.dirname(caminhoArquivo)
-  await fs.mkdir(pasta, { recursive: true })
-  await fs.writeFile(caminhoArquivo, JSON.stringify(entidades, null, 2), 'utf-8')
-}
+  private async salvarDados<T>(caminhoArquivo: string, entidades: T[]): Promise<void> {
+    const pasta = path.dirname(caminhoArquivo)
+    await fs.mkdir(pasta, { recursive: true })
+    await fs.writeFile(caminhoArquivo, JSON.stringify(entidades, null, 2), 'utf-8')
+  }
 
-export async function gerarNovoId(caminhoArquivo: string): Promise<string> {
-  const entidades = await lerDados<EntidadeComId>(caminhoArquivo)
-  if (entidades.length === 0) return '1'
-  const maiorId = Math.max(...entidades.map(e => parseInt(e.id, 10)))
-  return String(maiorId + 1)
-}
+  public async gerarNovoId(caminhoArquivo: string): Promise<string> {
+    const entidades = await this.lerDados<EntidadeComId>(caminhoArquivo)
+    if (!entidades.length) return '1'
+    const maiorId = Math.max(...entidades.map(e => parseInt(e.id, 10)))
+    return String(maiorId + 1)
+  }
 
-// -------------------- USERS --------------------
+  // -------------------- USERS --------------------
+  public async getAllUsers(): Promise<User[]> {
+    return this.lerDados<User>(this.USERS_FILE)
+  }
 
-export async function buscarTodosUsuarios(): Promise<User[]> {
-  return await lerDados<User>(ARQUIVO_USERS)
-}
+  public async createUser(user: User): Promise<User> {
+    const users = await this.getAllUsers()
+    users.push(user)
+    await this.salvarDados(this.USERS_FILE, users)
+    return user
+  }
 
-export async function criarUsuario(usuario: User): Promise<User> {
-  const usuarios = await buscarTodosUsuarios()
-  usuarios.push(usuario)
-  await salvarDados<User>(ARQUIVO_USERS, usuarios)
-  return usuario
-}
+  public async getUserById(id: string): Promise<User | undefined> {
+    const users = await this.getAllUsers()
+    return users.find(u => u.id === id)
+  }
 
-export async function buscarPorId(id: string): Promise<User | undefined> {
-  const usuarios = await buscarTodosUsuarios()
-  return usuarios.find(u => u.id === id)
-}
+  public async updateUser(id: string, data: Partial<User>): Promise<User | undefined> {
+    const users = await this.getAllUsers()
+    const index = users.findIndex(u => u.id === id)
+    if (index === -1) return undefined
 
-export async function atualizarUsuario(id: string, usuario: User): Promise<User | undefined> {
-  const usuarios = await buscarTodosUsuarios()
-  const indice = usuarios.findIndex(u => u.id === id)
-  if (indice === -1) return undefined
-  usuarios[indice] = { ...usuarios[indice], ...usuario, updatedAt: new Date().toISOString() }
-  await salvarDados<User>(ARQUIVO_USERS, usuarios)
-  return usuarios[indice]
-}
+    users[index] = {
+      ...users[index],
+      ...data,
+      updatedAt: new Date().toISOString()
+    }
 
-export async function deletarUsuario(id: string): Promise<boolean> {
-  const usuarios = await buscarTodosUsuarios()
-  const novos = usuarios.filter(u => u.id !== id)
-  if (novos.length === usuarios.length) return false
-  await salvarDados<User>(ARQUIVO_USERS, novos)
-  return true
-}
+    await this.salvarDados(this.USERS_FILE, users)
+    return users[index]
+  }
 
-export async function buscarAtivos(): Promise<User[]> {
-  const usuarios = await buscarTodosUsuarios()
-  return usuarios.filter(u => u.isActive)
-}
+  public async deleteUser(id: string): Promise<boolean> {
+    const users = await this.getAllUsers()
+    const novos = users.filter(u => u.id !== id)
+    if (novos.length === users.length) return false
 
-// -------------------- ROOMS --------------------
+    await this.salvarDados(this.USERS_FILE, novos)
+    return true
+  }
 
-export async function buscarTodasSalas(): Promise<Room[]> {
-  return await lerDados<Room>(ARQUIVO_ROOMS)
-}
+  public async getActiveUsers(): Promise<User[]> {
+    const users = await this.getAllUsers()
+    return users.filter(u => u.isActive)
+  }
 
-export async function criarSala(sala: Room): Promise<Room> {
-  const salas = await buscarTodasSalas()
-  salas.push(sala)
-  await salvarDados<Room>(ARQUIVO_ROOMS, salas)
-  return sala
-}
+  // -------------------- ROOMS --------------------
+  public async getAllRooms(): Promise<Room[]> {
+    return this.lerDados<Room>(this.ROOMS_FILE)
+  }
 
-export async function buscarSalaPorId(id: string): Promise<Room | undefined> {
-  const salas = await buscarTodasSalas()
-  return salas.find(r => r.id === id)
-}
+  public async createRoom(room: Room): Promise<Room> {
+    const rooms = await this.getAllRooms()
+    rooms.push(room)
+    await this.salvarDados(this.ROOMS_FILE, rooms)
+    return room
+  }
 
-export async function atualizarSala(id: string, dados: Partial<Room>): Promise<Room | undefined> {
-  const salas = await buscarTodasSalas()
-  const indice = salas.findIndex(r => r.id === id)
-  if (indice === -1) return undefined
-  salas[indice] = { ...salas[indice], ...dados }
-  await salvarDados<Room>(ARQUIVO_ROOMS, salas)
-  return salas[indice]
-}
+  public async getRoomById(id: string): Promise<Room | undefined> {
+    const rooms = await this.getAllRooms()
+    return rooms.find(r => r.id === id)
+  }
 
-export async function deletarSala(id: string): Promise<boolean> {
-  const salas = await buscarTodasSalas()
-  const novas = salas.filter(r => r.id !== id)
-  if (novas.length === salas.length) return false
-  await salvarDados<Room>(ARQUIVO_ROOMS, novas)
-  return true
-}
+  public async updateRoom(id: string, data: Partial<Room>): Promise<Room | undefined> {
+    const rooms = await this.getAllRooms()
+    const index = rooms.findIndex(r => r.id === id)
+    if (index === -1) return undefined
 
-// -------------------- BOOKINGS --------------------
+    rooms[index] = { ...rooms[index], ...data }
+    await this.salvarDados(this.ROOMS_FILE, rooms)
 
-export async function buscarTodasReservas(): Promise<Booking[]> {
-  return await lerDados<Booking>(ARQUIVO_BOOKINGS)
-}
+    return rooms[index]
+  }
 
-export async function criarReserva(reserva: Booking): Promise<Booking> {
-  const reservas = await buscarTodasReservas()
-  reservas.push(reserva)
-  await salvarDados<Booking>(ARQUIVO_BOOKINGS, reservas)
-  return reserva
-}
+  public async deleteRoom(id: string): Promise<boolean> {
+    const rooms = await this.getAllRooms()
+    const novos = rooms.filter(r => r.id !== id)
+    if (novos.length === rooms.length) return false
 
-export async function buscarReservaPorId(id: string): Promise<Booking | undefined> {
-  const reservas = await buscarTodasReservas()
-  return reservas.find(b => b.id === id)
-}
+    await this.salvarDados(this.ROOMS_FILE, novos)
+    return true
+  }
 
-export async function atualizarReserva(id: string, dados: Booking): Promise<Booking | undefined> {
-  const reservas = await buscarTodasReservas()
-  const indice = reservas.findIndex(b => b.id === id)
-  if (indice === -1) return undefined
-  reservas[indice] = { ...reservas[indice], ...dados }
-  await salvarDados<Booking>(ARQUIVO_BOOKINGS, reservas)
-  return reservas[indice]
-}
+  // -------------------- BOOKINGS --------------------
+  public async getAllBookings(): Promise<Booking[]> {
+    return this.lerDados<Booking>(this.BOOKINGS_FILE)
+  }
 
-export async function deletarReserva(id: string): Promise<boolean> {
-  const reservas = await buscarTodasReservas()
-  const novas = reservas.filter(b => b.id !== id)
-  if (novas.length === reservas.length) return false
-  await salvarDados<Booking>(ARQUIVO_BOOKINGS, novas)
-  return true
-}
+  public async createBooking(booking: Booking): Promise<Booking> {
+    const bookings = await this.getAllBookings()
+    bookings.push(booking)
+    await this.salvarDados(this.BOOKINGS_FILE, bookings)
+    return booking
+  }
 
-export async function buscarReservasPorSala(roomId: string): Promise<Booking[]> {
-  const reservas = await buscarTodasReservas()
-  return reservas.filter(b => b.roomId === roomId)
-}
+  public async getBookingById(id: string): Promise<Booking | undefined> {
+    const bookings = await this.getAllBookings()
+    return bookings.find(b => b.id === id)
+  }
 
-export async function buscarReservasPorUsuario(userId: string): Promise<Booking[]> {
-  const reservas = await buscarTodasReservas()
-  return reservas.filter(b => b.userId === userId)
-}
+  public async updateBooking(id: string, data: Partial<Booking>): Promise<Booking | undefined> {
+    const bookings = await this.getAllBookings()
+    const index = bookings.findIndex(b => b.id === id)
+    if (index === -1) return undefined
 
-export async function buscarReservasPorData(data: string): Promise<Booking[]> {
-  const reservas = await buscarTodasReservas()
-  return reservas.filter(b => b.date === data)
-}
+    bookings[index] = { ...bookings[index], ...data }
+    await this.salvarDados(this.BOOKINGS_FILE, bookings)
 
-export async function obterNovoIdReserva(): Promise<string> {
-  return await gerarNovoId(ARQUIVO_BOOKINGS)
+    return bookings[index]
+  }
+
+  public async deleteBooking(id: string): Promise<boolean> {
+    const bookings = await this.getAllBookings()
+    const novos = bookings.filter(b => b.id !== id)
+    if (novos.length === bookings.length) return false
+
+    await this.salvarDados(this.BOOKINGS_FILE, novos)
+    return true
+  }
+
+  public async getBookingsByRoom(roomId: string): Promise<Booking[]> {
+    const bookings = await this.getAllBookings()
+    return bookings.filter(b => b.roomId === roomId)
+  }
+
+  public async getBookingsByUser(userId: string): Promise<Booking[]> {
+    const bookings = await this.getAllBookings()
+    return bookings.filter(b => b.userId === userId)
+  }
+
+  public async getBookingsByDate(date: string): Promise<Booking[]> {
+    const bookings = await this.getAllBookings()
+    return bookings.filter(b => b.date === date)
+  }
+
+  public async generateNewBookingId(): Promise<string> {
+    return this.gerarNovoId(this.BOOKINGS_FILE)
+  }
 }
